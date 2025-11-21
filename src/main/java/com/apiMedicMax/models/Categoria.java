@@ -25,6 +25,9 @@ public class Categoria {
     @Column(length = 255)
     private String descripcion;
 
+    @Column(unique = true)
+    private String slug;
+
     @OneToMany(mappedBy = "categoria", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<Producto> productos;

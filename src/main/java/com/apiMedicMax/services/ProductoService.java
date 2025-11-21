@@ -43,5 +43,9 @@ public class ProductoService {
     public Producto findById(Long id){
         return productoRepository.findById(id).orElse(null);
     }
+
+    public List<Producto> getByCategoriaSlug(String slug) {
+        return productoRepository.findByCategoriaSlug(slug);
+    }   
     
 }

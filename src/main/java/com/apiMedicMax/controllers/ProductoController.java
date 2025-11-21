@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 @RequestMapping("/productos")
-@CrossOrigin(origins = "http://localhost:4200") // Permite acceso desde Angular
+@CrossOrigin(origins = "http://localhost:5173") // Permite acceso desde Angular
 public class ProductoController {
 
     @Autowired
@@ -49,6 +49,11 @@ public class ProductoController {
         }
         productoService.deleteProducto(id);
         return ResponseEntity.ok(producto);
+    }
+
+    @GetMapping("/categoria/{slug}")
+    public List<Producto> getProductosByCategoriaSlug(@PathVariable String slug) {
+        return productoService.getByCategoriaSlug(slug);
     }
     
     

@@ -12,7 +12,7 @@ import com.apiMedicMax.models.Categoria;
 
 @RestController
 @RequestMapping("/categorias")
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "http://localhost:5173")
 public class CategoriaController {
     @Autowired
     private CategoriaService categoriaService;
@@ -46,7 +46,7 @@ public class CategoriaController {
         return ResponseEntity.ok(updatedCategoria);
     }
 
-    @DeleteMapping //Elimina una categoría.
+    @DeleteMapping("/{id}") //Elimina una categoría.
     public ResponseEntity<Void> deleteCategoria(@PathVariable Long id) {
         boolean deleted = categoriaService.deleteCategoria(id);
         if (!deleted){
@@ -55,6 +55,13 @@ public class CategoriaController {
         return ResponseEntity.noContent().build();
     }
         
-    
+    @GetMapping("/slug/{slug}") //Obtiene una categoría por su slug.
+    public ResponseEntity<Categoria> getCategoriaBySlug(@PathVariable String slug) {
+        Categoria categoria = categoriaService.getCategoriaBySlug(slug);
+        if(categoria == null){
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(categoria);
+    }
     
 }

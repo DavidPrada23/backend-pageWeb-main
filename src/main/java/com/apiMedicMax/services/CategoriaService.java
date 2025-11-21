@@ -47,4 +47,7 @@ public class CategoriaService {
         }
         return false;
     }
+    public Categoria getCategoriaBySlug(String slug){
+        return categoriaRepository.findBySlug(slug).orElse(null);
+    }
 }
