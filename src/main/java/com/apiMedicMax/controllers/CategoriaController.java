@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.apiMedicMax.services.CategoriaService;
 import com.apiMedicMax.models.Categoria;
-
+import com.apiMedicMax.models.Producto;
 
 @RestController
 @RequestMapping("/categorias")
@@ -17,51 +17,62 @@ public class CategoriaController {
     @Autowired
     private CategoriaService categoriaService;
 
-    @PostMapping //Crea una nueva categoría.
+    @PostMapping // Crea una nueva categoría.
     public ResponseEntity<Categoria> createCategoria(@RequestBody Categoria categoria) {
         return ResponseEntity.ok(categoriaService.createCategoria(categoria));
     }
 
-    @GetMapping //Lista todas las categorías.
+    @GetMapping // Lista todas las categorías.
     public ResponseEntity<List<Categoria>> getAllCategorias() {
         List<Categoria> categorias = categoriaService.getAllCategorias();
         return ResponseEntity.ok(categorias);
     }
 
-    @GetMapping("/{id}") //Obtiene una categoría específica.
+    @GetMapping("/{id}") // Obtiene una categoría específica.
     public ResponseEntity<Categoria> getCategoriaById(@PathVariable Long id) {
         Categoria categoria = categoriaService.getCategoriaById(id);
-        if(categoria == null){
+        if (categoria == null) {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(categoria);
     }
-    
-    @PutMapping("/{id}") //Actualiza una categoría.
+
+    @PutMapping("/{id}") // Actualiza una categoría.
     public ResponseEntity<Categoria> updateCategoria(@PathVariable Long id, @RequestBody Categoria categoriaData) {
         Categoria updatedCategoria = categoriaService.updateCategoria(id, categoriaData);
-        if(updatedCategoria == null){
+        if (updatedCategoria == null) {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(updatedCategoria);
     }
 
-    @DeleteMapping("/{id}") //Elimina una categoría.
+    @DeleteMapping("/{id}") // Elimina una categoría.
     public ResponseEntity<Void> deleteCategoria(@PathVariable Long id) {
         boolean deleted = categoriaService.deleteCategoria(id);
-        if (!deleted){
+        if (!deleted) {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.noContent().build();
     }
-        
-    @GetMapping("/slug/{slug}") //Obtiene una categoría por su slug.
+
+    @GetMapping("/slug/{slug}") // Obtiene una categoría por su slug.
     public ResponseEntity<Categoria> getCategoriaBySlug(@PathVariable String slug) {
         Categoria categoria = categoriaService.getCategoriaBySlug(slug);
-        if(categoria == null){
+        if (categoria == null) {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(categoria);
     }
-    
+
+    @GetMapping("/{slug}/productos")
+    public ResponseEntity<List<Producto>> getProductosPorCategoria(@PathVariable String slug) {
+        List<Producto> productos = categoriaService.getProductosPorCategoria(slug);
+
+        if (productos == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(productos);
+    }
+
 }

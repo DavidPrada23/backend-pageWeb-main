@@ -5,11 +5,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.apiMedicMax.models.Producto;
+import com.apiMedicMax.repositories.ProductoRepository;
 import com.apiMedicMax.services.ProductoService;
 
 import java.util.List;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 
 @RestController
@@ -19,6 +18,7 @@ public class ProductoController {
 
     @Autowired
     private ProductoService productoService;
+    private ProductoRepository productoRepository;
 
     @GetMapping
     public ResponseEntity<List<Producto>> getAllProductos() {
@@ -56,5 +56,9 @@ public class ProductoController {
         return productoService.getByCategoriaSlug(slug);
     }
     
+    @GetMapping("/buscar")
+    public List<Producto> buscarProductos(@RequestParam String query) {
+        return productoRepository.searchByNombre(query.toLowerCase());
+    }
     
 }

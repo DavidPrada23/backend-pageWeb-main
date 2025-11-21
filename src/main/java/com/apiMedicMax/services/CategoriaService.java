@@ -7,12 +7,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.apiMedicMax.repositories.CategoriaRepository;
+import com.apiMedicMax.repositories.ProductoRepository;
 import com.apiMedicMax.models.Categoria;
+import com.apiMedicMax.models.Producto;
 
 @Service
 public class CategoriaService {
     @Autowired
     private CategoriaRepository categoriaRepository;
+    private ProductoRepository productoRepository;
 
     public Categoria createCategoria(Categoria categoria){
         return categoriaRepository.save(categoria);
@@ -48,6 +51,17 @@ public class CategoriaService {
         return false;
     }
     public Categoria getCategoriaBySlug(String slug){
-        return categoriaRepository.findBySlug(slug).orElse(null);
+        return categoriaRepository.findBySlug(slug);
     }
+
+    public List<Producto> getProductosPorCategoria(String slug) {
+    Categoria categoria = categoriaRepository.findBySlug(slug);
+
+    if (categoria == null) {
+        return null;
+    }
+
+    return productoRepository.findByCategoria(categoria);
+}
+
 }
