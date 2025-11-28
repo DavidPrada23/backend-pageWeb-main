@@ -17,6 +17,7 @@ public interface ProductoRepository extends JpaRepository<Producto, Long> {
     List<Producto> findCategoriaById(Long categoriaId);
     List<Producto> findByCategoriaSlug(String slug);
     List<Producto> findByCategoria(Categoria categoria);
+    
     @Query("SELECT p FROM Producto p WHERE LOWER(p.nombre) LIKE LOWER(CONCAT('%', :query, '%'))")
     List<Producto> searchByNombre(@Param("query") String query);
 }

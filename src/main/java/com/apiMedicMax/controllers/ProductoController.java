@@ -57,8 +57,17 @@ public class ProductoController {
     }
     
     @GetMapping("/buscar")
-    public List<Producto> buscarProductos(@RequestParam String query) {
-        return productoRepository.searchByNombre(query.toLowerCase());
+    public ResponseEntity<?> buscarProductos(@RequestParam String query) {
+        if (query == null || query.trim().isEmpty()) {
+            return ResponseEntity.badRequest().body("El parámetro de búsqueda no puede estar vacío.");
+        }
+
+        List<Producto> resultados = productoRepository.searchByNombre(query.toLowerCase());
+
+        if(resultados.isEmpty()) {
+            return ResponseEntity.ok("No se encontraron productos que coincidan con la búsqueda.");
+        }
+        return ResponseEntity.ok(resultados);
     }
     
 }
