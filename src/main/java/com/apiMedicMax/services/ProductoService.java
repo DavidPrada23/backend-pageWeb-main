@@ -55,6 +55,7 @@ public class ProductoService {
         dto.setStock(p.getStock());
         dto.setPrecio(p.getPrecio());
         dto.setDescripcion(p.getDescripcion());
+        dto.setImagen(p.getImagen());
 
         // Datos planos de la categoría (limpio para frontend)
         dto.setCategoriaNombre(p.getCategoria().getNombre());

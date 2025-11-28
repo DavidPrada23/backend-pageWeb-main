@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.apiMedicMax.dto.ProductoDTO;
+import com.apiMedicMax.exceptions.ProductoNoEncontradoException;
 import com.apiMedicMax.models.Producto;
 import com.apiMedicMax.repositories.ProductoRepository;
 import com.apiMedicMax.services.ProductoService;
@@ -29,12 +30,10 @@ public class ProductoController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Producto> getProductoById(@PathVariable Long id) {
-        Producto producto = productoService.getProductoById(id);
-        if (producto == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(producto);
+    public ProductoDTO getProductoPorId(@PathVariable Long id) {
+        return productoService.toDTO(
+                productoRepository.findById(id)
+                        .orElseThrow(() -> new ProductoNoEncontradoException("Producto no encontrado")));
     }
 
     @PostMapping

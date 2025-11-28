@@ -10,6 +10,7 @@ public class ProductoDTO {
     private int stock;
     private double precio;
     private String descripcion;
+    private String imagen;
 
     private String categoriaNombre;
     private String categoriaSlug;

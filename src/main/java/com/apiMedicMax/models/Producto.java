@@ -1,4 +1,5 @@
 package com.apiMedicMax.models;
+
 import java.io.Serializable;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -10,7 +11,7 @@ import lombok.*;
 @Table(name = "product")
 @Getter
 @Setter
-public class Producto implements Serializable{
+public class Producto implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -24,10 +25,13 @@ public class Producto implements Serializable{
     @Column(nullable = false)
     private int stock;
 
-    @Column(nullable = false, name = "price")   
+    @Column(nullable = false, name = "price")
     private double precio;
 
     private String descripcion;
+
+    @Column(nullable = true)
+    private String imagen;
 
     @ManyToOne
     @JsonBackReference

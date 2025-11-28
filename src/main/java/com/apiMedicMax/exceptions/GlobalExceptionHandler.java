@@ -11,5 +11,9 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleEmailAlreadyExistsException(EmailAlreadyExistsException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
     }
+    @ExceptionHandler(ProductoNoEncontradoException.class)
+    public ResponseEntity<String> handleProductoNoEncontradoException(ProductoNoEncontradoException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
 
 }
