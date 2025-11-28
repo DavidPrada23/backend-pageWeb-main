@@ -1,15 +1,17 @@
 package com.apiMedicMax.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.apiMedicMax.dto.ProductoDTO;
 import com.apiMedicMax.models.Producto;
 import com.apiMedicMax.repositories.ProductoRepository;
 import com.apiMedicMax.services.ProductoService;
 
 import java.util.List;
-
+import org.springframework.data.domain.Page;
 
 @RestController
 @RequestMapping("/productos")
@@ -29,7 +31,7 @@ public class ProductoController {
     @GetMapping("/{id}")
     public ResponseEntity<Producto> getProductoById(@PathVariable Long id) {
         Producto producto = productoService.getProductoById(id);
-        if(producto == null){
+        if (producto == null) {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(producto);
@@ -40,11 +42,11 @@ public class ProductoController {
         Producto nuevo = productoService.saveProducto(producto);
         return ResponseEntity.ok(nuevo);
     }
-   
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Producto> deleteProducto(@PathVariable Long id) {
         Producto producto = productoService.findById(id);
-        if(producto == null){
+        if (producto == null) {
             return ResponseEntity.notFound().build();
         }
         productoService.deleteProducto(id);
@@ -55,19 +57,24 @@ public class ProductoController {
     public List<Producto> getProductosByCategoriaSlug(@PathVariable String slug) {
         return productoService.getByCategoriaSlug(slug);
     }
-    
+
     @GetMapping("/buscar")
-    public ResponseEntity<?> buscarProductos(@RequestParam String query) {
-        if (query == null || query.trim().isEmpty()) {
-            return ResponseEntity.badRequest().body("El parámetro de búsqueda no puede estar vacío.");
-        }
+    public ResponseEntity<List<ProductoDTO>> buscarProductos(@RequestParam String query) {
+        List<Producto> productos = productoRepository.searchByNombre(query.toLowerCase());
 
-        List<Producto> resultados = productoRepository.searchByNombre(query.toLowerCase());
+        List<ProductoDTO> dtos = productos.stream()
+                .map(productoService::toDTO)
+                .toList();
 
-        if(resultados.isEmpty()) {
-            return ResponseEntity.ok("No se encontraron productos que coincidan con la búsqueda.");
-        }
-        return ResponseEntity.ok(resultados);
+        return ResponseEntity.ok(dtos);
     }
-    
+
+    @GetMapping("/paginado")
+    public Page<Producto> obtenerProductosPaginados(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "12") int size) {
+        PageRequest pageable = PageRequest.of(page, size);
+        return productoRepository.findAll(pageable);
+    }
+
 }
