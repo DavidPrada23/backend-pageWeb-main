@@ -76,4 +76,9 @@ public class ProductoController {
         return productoRepository.findAll(pageable);
     }
 
+    @GetMapping("/{id}/relacionados")
+    public List<ProductoDTO> getRelacionados(@PathVariable Long id) {
+        return productoService.obtenerRelacionados(id);
+    }
+
 }
