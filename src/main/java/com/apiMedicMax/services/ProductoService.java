@@ -64,4 +64,17 @@ public class ProductoService {
         return dto;
     }
 
+    public List<ProductoDTO> obtenerRelacionados(Long id) {
+
+        Producto base = productoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
+
+        List<Producto> relacionados = productoRepository
+                .findTop6ByCategoriaIdAndIdNot(base.getCategoria().getId(), id);
+
+        return relacionados.stream()
+                .map(this::toDTO)
+                .toList();
+    }
+
 }
