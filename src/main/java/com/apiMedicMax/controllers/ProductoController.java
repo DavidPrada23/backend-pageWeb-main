@@ -79,4 +79,15 @@ public class ProductoController {
         return productoService.obtenerRelacionados(id);
     }
 
+    @GetMapping("/filtro")
+    public Page<ProductoDTO> filtrarProductos(
+            @RequestParam(required = false) String categoria,
+            @RequestParam(required = false) String marca,
+            @RequestParam(required = false) Double min,
+            @RequestParam(required = false) Double max,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "12") int size) {
+        return productoService.filtrarProductos(categoria, marca, min, max, page, size);
+    }
+
 }

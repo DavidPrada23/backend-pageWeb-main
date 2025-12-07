@@ -82,4 +82,19 @@ public class ProductoService {
                 .toList();
     }
 
+    public Page<ProductoDTO> filtrarProductos(
+            String categoria,
+            String marca,
+            Double min,
+            Double max,
+            int page,
+            int size) {
+        PageRequest pageable = PageRequest.of(page, size);
+
+        Page<Producto> resultado = productoRepository.filtrar(
+                categoria, marca, min, max, pageable);
+
+        return resultado.map(this::toDTO);
+    }
+
 }
