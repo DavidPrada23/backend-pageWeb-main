@@ -85,9 +85,10 @@ public class ProductoController {
             @RequestParam(required = false) String marca,
             @RequestParam(required = false) Double min,
             @RequestParam(required = false) Double max,
+            @RequestParam(required = false) String query,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "12") int size) {
-        return productoService.filtrarProductos(categoria, marca, min, max, page, size);
+        return productoService.filtrarProductos(categoria, marca, min, max, query, page, size);
     }
 
 }

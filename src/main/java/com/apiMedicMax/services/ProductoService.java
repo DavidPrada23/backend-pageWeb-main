@@ -87,12 +87,13 @@ public class ProductoService {
             String marca,
             Double min,
             Double max,
+            String query,
             int page,
             int size) {
         PageRequest pageable = PageRequest.of(page, size);
 
         Page<Producto> resultado = productoRepository.filtrar(
-                categoria, marca, min, max, pageable);
+                categoria, marca, min, max, query, pageable);
 
         return resultado.map(this::toDTO);
     }

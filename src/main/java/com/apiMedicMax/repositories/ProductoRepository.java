@@ -33,12 +33,14 @@ public interface ProductoRepository extends JpaRepository<Producto, Long> {
                 AND (:marca IS NULL OR p.marca = :marca)
                 AND (:min IS NULL OR p.precio >= :min)
                 AND (:max IS NULL OR p.precio <= :max)
+                AND (:query IS NULL OR LOWER(p.nombre) LIKE LOWER(CONCAT('%', :query, '%')))
             """)
     Page<Producto> filtrar(
             @Param("categoria") String categoria,
             @Param("marca") String marca,
             @Param("min") Double min,
             @Param("max") Double max,
+            @Param("query") String query,
             Pageable pageable);
 
 }
