@@ -29,11 +29,11 @@ public interface ProductoRepository extends JpaRepository<Producto, Long> {
 
     @Query("""
                 SELECT p FROM Producto p
-                WHERE (:categoria IS NULL OR LOWER(p.categoria.slug) = LOWER(:categoria))
-                AND (:marca IS NULL OR LOWER(p.marca) = LOWER(:marca))
-                AND (:min IS NULL OR p.precio >= :min)
-                AND (:max IS NULL OR p.precio <= :max)
-                AND (:query IS NULL OR LOWER(p.nombre) LIKE LOWER(CONCAT('%', :query, '%')))
+                WHERE (:categoria IS NULL OR :categoria = '' OR LOWER(p.categoria.slug) = LOWER(:categoria))
+                AND (:marca IS NULL OR :marca = '' OR LOWER(p.marca) = LOWER(:marca))
+                AND p.precio >= COALESCE(:min, p.precio)
+                AND p.precio <= COALESCE(:max, p.precio)
+                AND (:query IS NULL OR :query = '' OR LOWER(p.nombre) LIKE LOWER(CONCAT('%', :query, '%')))
             """)
     Page<Producto> filtrar(
             @Param("categoria") String categoria,
