@@ -12,6 +12,7 @@ import com.apiMedicMax.repositories.ProductoRepository;
 import com.apiMedicMax.dto.ItemCarrito;
 import com.apiMedicMax.models.ItemPedido;
 import com.apiMedicMax.models.Pedido;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class CarritoService {
@@ -36,6 +37,7 @@ public class CarritoService {
         return carrito.removeIf(item -> item.getProducto().getId().equals(productoId));
     }
 
+    @Transactional
     public Pedido realizarCheckout(){
         Pedido pedido = new Pedido();
         pedido.setEstado("Pendiente");
@@ -43,6 +45,16 @@ public class CarritoService {
 
         List<ItemPedido> itemsPedido = new ArrayList<>();
         for (ItemCarrito item: carrito){
+            Producto producto = productoRepository.findById(item.getProducto().getId())
+                .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
+            if (producto.getStock() < item.getCantidad()) {
+                throw new IllegalStateException(
+                    "Stock insuficiente para " + producto.getNombre()
+                );
+            }
+            producto.setStock(producto.getStock() - item.getCantidad());
+            productoRepository.save(producto);
+
             ItemPedido ip = new ItemPedido();
             ip.setProducto(item.getProducto());
             ip.setCantidad(item.getCantidad());

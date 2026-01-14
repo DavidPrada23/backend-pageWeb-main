@@ -40,8 +40,12 @@ public class CarritoController {
 
     @PostMapping("/checkout") //Realiza el checkout
     public ResponseEntity<String> checkout() {
-        carritoService.realizarCheckout();
-        return ResponseEntity.ok("Compra realizada exitosamente");
+        try {
+            carritoService.realizarCheckout();
+            return ResponseEntity.ok("Compra realizada exitosamente");
+        } catch (IllegalStateException ex) {
+            return ResponseEntity.status(409).body(ex.getMessage());
+        }
     }
     
     
