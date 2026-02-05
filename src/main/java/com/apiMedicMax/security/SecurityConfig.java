@@ -11,6 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.http.HttpMethod;
 
 import org.springframework.security.config.Customizer;
 
@@ -31,8 +32,14 @@ public class SecurityConfig {
         .csrf(csrf -> csrf.disable())
         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .authorizeHttpRequests(auth -> auth
-            .requestMatchers("/auth/login", "/auth/register","/productos", "/categorias").permitAll() //EndPoints públicos.
-            .anyRequest().permitAll() //Todos los demás requieren authenticación.
+            .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+            .requestMatchers("/auth/login", "/auth/register").permitAll()
+            .requestMatchers(HttpMethod.GET, "/productos/**", "/categorias/**").permitAll()
+            .requestMatchers("/service/me").authenticated()
+            .requestMatchers(HttpMethod.GET, "/service/all", "/service/*").hasAuthority("ROLE_ADMIN")
+            .requestMatchers(HttpMethod.DELETE, "/service/*").hasAuthority("ROLE_ADMIN")
+            .requestMatchers(HttpMethod.GET, "/pedidos/pagados").hasAuthority("ROLE_ADMIN")
+            .anyRequest().authenticated()
             )
         .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class).build();
     }

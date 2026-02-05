@@ -9,5 +9,5 @@ import com.apiMedicMax.models.Pedido;
 
 @Repository
 public interface PedidoRepository extends JpaRepository<Pedido, Long>{
-    List<Pedido> findUserById(Long userId);
+    List<Pedido> findByEstadoIgnoreCase(String estado);
 }

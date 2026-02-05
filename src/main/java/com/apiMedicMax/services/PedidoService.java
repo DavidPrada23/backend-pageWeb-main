@@ -27,6 +27,10 @@ public class PedidoService {
         return pedidoRepository.findById(id).orElse(null);
     }
 
+    public List<Pedido> getPedidosPagados() {
+        return pedidoRepository.findByEstadoIgnoreCase("PAGADO");
+    }
+
     public Pedido updatePedido(Long id, Pedido pedidoData){
         Optional<Pedido> optionalPedido = pedidoRepository.findById(id);
         if (optionalPedido.isPresent()){

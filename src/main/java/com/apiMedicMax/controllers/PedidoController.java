@@ -36,6 +36,11 @@ public class PedidoController {
         return ResponseEntity.ok(pedidos);
     }
 
+    @GetMapping("/pagados")
+    public ResponseEntity<List<Pedido>> getPedidosPagados() {
+        return ResponseEntity.ok(pedidoService.getPedidosPagados());
+    }
+
     @PutMapping("/{id}") //Actualiza el estado del pedido.
     public ResponseEntity<Pedido> updatePedido(@PathVariable Long id, @RequestBody Pedido pedido) {
         Pedido updated = pedidoService.updatePedido(id, pedido);
@@ -46,7 +51,7 @@ public class PedidoController {
         
     }
 
-    @DeleteMapping //Cancela el pedido.
+    @DeleteMapping("/{id}") //Cancela el pedido.
     public ResponseEntity<Void> deletePedido(@PathVariable Long id){
         boolean deleted = pedidoService.deletePedido(id);
         if (!deleted){

@@ -3,10 +3,12 @@ package com.apiMedicMax.dto;
 public class UserProfileResponse {
     private String username;
     private String email;
+    private String address;
 
-    public UserProfileResponse(String username, String email){
+    public UserProfileResponse(String username, String email, String address){
         this.username = username;
         this.email = email;
+        this.address = address;
     }
 
     public String getUsername(){
@@ -15,6 +17,10 @@ public class UserProfileResponse {
 
     public String getEmail(){
         return email;
+    }
+
+    public String getAddress() {
+        return address;
     }
     
 }
